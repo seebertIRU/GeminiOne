@@ -1,2 +1,0 @@
-# GeminiOne
-AI Python Work
