@@ -2,6 +2,9 @@ from functions.run_python import run_python_file
 
 
 def test():
+    result=run_python_file("calculator", "main.py")
+    print(result)
+
     result = run_python_file("calculator", "main.py", "3 + 5")
     print(result)
 
@@ -15,5 +18,5 @@ def test():
     print(result)
 
     
-if __name__ == "__main__":
+if __name__ == "__main__":uv
     test()
