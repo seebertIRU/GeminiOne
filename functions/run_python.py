@@ -1,5 +1,6 @@
 import os
 import subprocess
+from google.genai import types
 
 def run_python_file(working_directory, file_path, args=[]):
     abs_working_dir = os.path.abspath(working_directory)
@@ -8,8 +9,8 @@ def run_python_file(working_directory, file_path, args=[]):
         return f'Error: Cannot execute "{file_path}" as it is outside the permitted working directory'
     if not os.path.isfile(target_file):
         return f'Error: File "{file_path}" not found.'
-    if not target_file[-2:]=='py':
-       f'Error: "{file_path}" is not a Python file.'
+    if not target_file.endswith('.py'):  # Fixed: Added return statement and proper string method
+        return f'Error: "{file_path}" is not a Python file.'
     try:
         commands = ["python", target_file]
         if args:
@@ -31,4 +32,31 @@ def run_python_file(working_directory, file_path, args=[]):
             output.append(f"Process exited with code {result.returncode}")
         return "\n".join(output) if output else "No output produced."
     except Exception as e:
-        return f"Error: executing Python file: {e}"
+        return f"Error executing Python file: {e}"  # Fixed: Removed colon after "Error"
+
+schema_run_python_file = types.FunctionDeclaration(  # Fixed: Renamed to match function name
+    name="run_python_file",
+    description="Execute Python files with optional arguments",
+    parameters=types.Schema(
+        type=types.Type.OBJECT,
+        properties={
+            "working_directory": types.Schema(
+                type=types.Type.STRING,
+                description="The directory to work in.",
+            ),
+            "file_path": types.Schema(
+                type=types.Type.STRING,
+                description="The file to execute."
+            ),
+            "args": types.Schema(
+                type=types.Type.ARRAY,  # Fixed: Specified ARRAY type for list of strings
+                items=types.Schema(  # Fixed: Added items schema to define array elements
+                    type=types.Type.STRING,
+                    description="Individual argument string"
+                ),
+                description="The arguments to add to the file to execute"
+            )
+        },
+        required=["working_directory", "file_path"]  # Added required fields
+    ),
+)
