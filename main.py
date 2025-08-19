@@ -107,8 +107,9 @@ def call_function(function_call_part, verbose=False):
 
 
 def generate_content(client, messages, verbose):
+    limit=20
     while True:
-        
+        limit-=1
         modeln=model2_name
         response = client.models.generate_content(
             model=modeln,
@@ -118,7 +119,7 @@ def generate_content(client, messages, verbose):
             ),
         )
         
-        if not response.function_calls:
+        if (not response.function_calls) or limit<1:
             print("Response:")
             print(response.text)
             # Get the AI's final response after processing the function result
@@ -156,6 +157,11 @@ def generate_content(client, messages, verbose):
                     response={"result": result}
                 ))]
             ))
+        
+        #handle candidates
+        for candidate in response.candidates:
+            messages.append(candidate.content)
+
 
 
         

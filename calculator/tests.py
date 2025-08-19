@@ -1,7 +1,5 @@
-# tests.py
-
 import unittest
-from pkg.calculator import Calculator
+from calculator import Calculator
 
 
 class TestCalculator(unittest.TestCase):
@@ -25,8 +23,8 @@ class TestCalculator(unittest.TestCase):
         self.assertEqual(result, 5)
 
     def test_nested_expression(self):
-        result = self.calculator.evaluate("3 * 4 + 5")
-        self.assertEqual(result, 17)
+        result = self.calculator.evaluate("3 + 4 * 5")
+        self.assertEqual(result, 23)
 
     def test_complex_expression(self):
         result = self.calculator.evaluate("2 * 3 - 8 / 2 + 5")
